@@ -5,27 +5,14 @@
 using namespace std;
 using namespace cv;
 
-string type2str(int type) {
-  string r;
-
-  uchar depth = type & CV_MAT_DEPTH_MASK;
-  uchar chans = 1 + (type >> CV_CN_SHIFT);
-
-  switch ( depth ) {
-    case CV_8U:  r = "8U"; break;
-    case CV_8S:  r = "8S"; break;
-    case CV_16U: r = "16U"; break;
-    case CV_16S: r = "16S"; break;
-    case CV_32S: r = "32S"; break;
-    case CV_32F: r = "32F"; break;
-    case CV_64F: r = "64F"; break;
-    default:     r = "User"; break;
-  }
-
-  r += "C";
-  r += (chans+'0');
-
-  return r;
+template<typename T>
+ostream& operator<<(ostream &os, const vector<T> &vec){
+    os << "[";
+    for(int i = 0; i < vec.size(); i++){
+        os << vec[i] << (i == vec.size()-1 ? "" : ", ");
+    }
+    os << "]";
+    return os;
 }
 
 int main(int argc, char **argv) {
@@ -52,14 +39,17 @@ int main(int argc, char **argv) {
     }
     cout << "converted images to hsv space" << endl;
 
-    for(int img = 0; img < imgs.size(); img++){
-        for(int i = 0; i < imgs[img].rows; i++){
-            for(int j = 0; j < imgs[img].cols; j++){
-               cout << imgs[img].at<Vec3b>(i, j) << " " << hsv_imgs[img].at<Vec3f>(i,j) << endl;
+    vector<float> maxs = {0, 0, 0};
+    for(Mat hsv_img : hsv_imgs){
+        for(int i = 0; i < hsv_img.rows; i++){
+            for(int j = 0; j < hsv_img.cols; j++){
+               maxs[0] = max(maxs[0], hsv_img.at<Vec3f>(i, j)[0]);
+               maxs[1] = max(maxs[1], hsv_img.at<Vec3f>(i, j)[1]);
+               maxs[2] = max(maxs[2], hsv_img.at<Vec3f>(i, j)[2]);
             }
         }
-
     }
+    cout << "maximum hsv  elements " << maxs << endl;
 
     for(int i = 0; i < imgs.size(); i++){
         imshow(imgnames[i], imgs[i]);
