@@ -9,8 +9,12 @@ typedef std::vector<std::vector<std::vector<int>>> Histogram;
 
 class HistogramCalculator {
 public:
-    Histogram calc(cv::Mat hsv_img, const cv::Vec3i &nbins, const cv::Vec3f &range);
-
+    HistogramCalculator(cv::Vec3i nbins, cv::Vec3f range);
+    Histogram calc(cv::Mat hsv_img);
+    cv::Vec3f calc_repr(cv::Vec3i bin);
+protected:
+    cv::Vec3i nbins;
+    cv::Vec3f range;
 };
 
 #endif // HISTOGRAMCALCULATOR_H

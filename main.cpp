@@ -78,9 +78,10 @@ int main(int argc, char **argv) {
         histograms.push_back(hist);
     }
     */
+    HistogramCalculator hist_calc(nbins, HSVConverter::hsv_range);
     vector<Histogram> hsv_hists;
     for(Mat hsv_img : hsv_imgs) {
-        Histogram hist = HistogramCalculator().calc(hsv_img, nbins, HSVConverter::hsv_range);
+        Histogram hist = hist_calc.calc(hsv_img);
         hsv_hists.push_back(hist);
     }
 
@@ -91,9 +92,9 @@ int main(int argc, char **argv) {
         for(int i = 0; i < hist.size(); i++) {
             for(int j = 0; j < hist[i].size(); j++) {
                 for(int k = 0; k < hist[i][j].size(); k++) {
-                    vector<int> bin_indices = {i, j, k};
+                    Vec3i bin(i, j, k);
                     bin_sum += hist[i][j][k];
-                    cout << "bin " << bin_indices << ": " << hist[i][j][k] << endl;
+                    cout << "bin " << bin << ": " << hist[i][j][k] << " repr " << hist_calc.calc_repr(bin) << endl;
                 }
             }
         }

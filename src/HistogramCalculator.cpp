@@ -3,7 +3,12 @@
 using namespace std;
 using namespace cv;
 
-Histogram HistogramCalculator::calc(Mat hsv_img, const Vec3i &nbins, const Vec3f &range){
+HistogramCalculator::HistogramCalculator(Vec3i nbins, Vec3f range){
+    this->nbins = nbins;
+    this->range = range;
+}
+
+Histogram HistogramCalculator::calc(Mat hsv_img){
     vector<Mat> img_vec = {hsv_img};
     vector<int> use_all_channels = {0, 1, 2};
     Mat res;
@@ -23,3 +28,8 @@ Histogram HistogramCalculator::calc(Mat hsv_img, const Vec3i &nbins, const Vec3f
     }
     return res_hist;
 }
+
+Vec3f HistogramCalculator::calc_repr(Vec3i bin){
+    return Vec3f(bin[0]*range[0]/nbins[0], bin[1]*range[1]/nbins[1], bin[2]*range[2]/nbins[2]);
+}
+
