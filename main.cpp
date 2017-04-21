@@ -3,6 +3,8 @@
 #include "ImgReader.h"
 #include "HSVConverter.h"
 #include "HistogramCalculator.h"
+#include "ImageSimilaritySorter.h"
+#include "L1Distance.h"
 #include "utils.h"
 
 using namespace std;
@@ -62,6 +64,10 @@ int main(int argc, char **argv) {
         cout << "bin sum abs " << bin_sum_abs << " expected " << hsv_imgs[img].total() << endl;
         cout << "bin sum norm " << bin_sum_norm << " expected 1" << endl;
     }
+
+    int query_id = 1;
+    vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, norm_hsv_hists, L1Distance());
+    cout << "images similar to " << query_id << ": " << ids_sorted << endl;
 
     for(int i = 0; i < imgs.size(); i++) {
         imshow(imgnames[i], imgs[i]);
