@@ -3,7 +3,7 @@
 using namespace std;
 using namespace cv;
 
-const Vec3f HSVConverter::ocv_hsv_range = Vec3f(180, 255, 255);
+const Vec3f HSVConverter::ocv_hsv_range = Vec3f(180, 256, 256);
 const Vec3f HSVConverter::hsv_range = Vec3f(360, 1, 1);
 
 vector<Mat> HSVConverter::convert_all(vector<Mat> imgs){

@@ -6,7 +6,7 @@
 
 class HSVConverter {
 public:
-    // [180, 255, 255], [360, 1, 1]
+    // [180, 256, 256], [360, 1, 1]
     static const cv::Vec3f ocv_hsv_range, hsv_range;
 
     // converts from BGR to HSV
