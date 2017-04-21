@@ -2,10 +2,11 @@
 #include <opencv2/opencv.hpp>
 #include "ImgReader.h"
 #include "HSVConverter.h"
-#include "Histogramm.h"
+#include "HistogramCalculator.h"
 
 using namespace std;
 using namespace cv;
+
 
 template<typename T>
 ostream& operator<<(ostream &os, const vector<T> &vec) {
@@ -16,9 +17,6 @@ ostream& operator<<(ostream &os, const vector<T> &vec) {
     os << "]";
     return os;
 }
-
-
-
 
 
 
@@ -42,18 +40,16 @@ int main(int argc, char **argv) {
         }
     }
     cout << "maximum hsv elements " << maxs << endl;
+    /*
+    vector<Mat> res;
+    calcHist(hsv_imgs, vector<int>{0,1,2}, Mat(), res, vector<int>{16,3,3}, vector<float>{0,360,0,1,0,1});
+    return 8;
 
     Mat hist2;
     Mat &img = hsv_imgs[2];
     calcHist(vector<Mat>{img}, vector<int>{0,1,2}, Mat(), hist2, vector<int>{16,3,3}, vector<float>{0,360,0,1,0,1});
-    /*
-    int ch[] = {0,1,2};
-    int siz[] = {16,3,3};
-    float a[] = {0,360}, b[] = {0, 1};
-    const float* rang[] = {a, b, b};
-    calcHist(&hsv_imgs[0], 1, ch, Mat(), hist2, 3, siz, rang);
-    cout << "hist 2 (img pixels " << hsv_imgs[0].total() << ")"<< endl;
-    */
+
+
     int sum = 0;
     for (int i=0; i<16; i++) {
         for (int j=0; j<3; j++) {
@@ -66,21 +62,11 @@ int main(int argc, char **argv) {
     }
 
     cout << "bin sum " << sum << " number histogram pixels " << img.total() << endl;
-    return 7;
-    /*
-    Histogramm h(Vec3i(16,3,3), Vec3f(360,1,1));
-    for(int i = 0; i < 360; i++)
-        for(float j = 0; j < 1; j += 0.01)
-            for(float k = 0; k < 1; k += 0.01)
-                h.increment_bin(Vec3f(i,j,k));
-    for(int bin = 0; bin < h.get_bins().size(); bin++){
-        cout << h.get_bins()[bin] << " hits for bin " << bin << " (repr " << h.calc_repr(bin) << "): " << endl;
-    }
-    return 6;
     */
 
 
     Vec3i nbins(16, 3, 3);
+    /*
     vector<Histogramm> histograms;
     for(Mat hsv_img : hsv_imgs) {
         Histogramm hist(nbins, HSVConverter::hsv_range);
@@ -91,7 +77,30 @@ int main(int argc, char **argv) {
         }
         histograms.push_back(hist);
     }
+    */
+    vector<Histogram> hsv_hists;
+    for(Mat hsv_img : hsv_imgs) {
+        Histogram hist = HistogramCalculator().calc(hsv_img, nbins, HSVConverter::hsv_range);
+        hsv_hists.push_back(hist);
+    }
 
+    for(int img = 0; img < hsv_hists.size(); img++) {
+        int bin_sum = 0;
+        Histogram &hist = hsv_hists[img];
+        cout << "histogram of " << img << ":" << endl;
+        for(int i = 0; i < hist.size(); i++) {
+            for(int j = 0; j < hist[i].size(); j++) {
+                for(int k = 0; k < hist[i][j].size(); k++) {
+                    vector<int> bin_indices = {i, j, k};
+                    bin_sum += hist[i][j][k];
+                    cout << "bin " << bin_indices << ": " << hist[i][j][k] << endl;
+                }
+            }
+        }
+        cout << "bin sum " << bin_sum << " expected " << hsv_imgs[img].total() << endl;
+    }
+
+    /*
     for(int i = 0; i < histograms.size(); i++) {
         cout << "histogram nr. " << i << " (" << imgnames[i] << ")" << endl;
         for(int bin = 0; bin < histograms[i].get_bins().size(); bin++) {
@@ -104,7 +113,7 @@ int main(int argc, char **argv) {
             cout << " (rgb " << rgb << "): " << endl;
         }
     }
-
+    */
 
 
     for(int i = 0; i < imgs.size(); i++) {
