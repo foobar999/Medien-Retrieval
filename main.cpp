@@ -69,9 +69,20 @@ int main(int argc, char **argv) {
     vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, norm_hsv_hists, L1Distance());
     cout << "images similar to " << query_id << ": " << ids_sorted << endl;
 
-    for(int i = 0; i < imgs.size(); i++) {
-        imshow(imgnames[i], imgs[i]);
+    vector<Mat> thumbnails;
+    for(int i : ids_sorted){
+        Mat res;
+        cv::resize(imgs[i], res, Size(200, 200));
+        thumbnails.push_back(res);
     }
+    Mat conc_thumbnails;
+    hconcat(thumbnails, conc_thumbnails);
+
+    imshow("most similar images", conc_thumbnails);
+    //for(int i = 0; i < imgs.size(); i++) {
+    //    imshow(imgnames[i], imgs[i]);
+    //}
+
     waitKey();
     return 0;
 }
