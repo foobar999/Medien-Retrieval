@@ -3,21 +3,10 @@
 #include "ImgReader.h"
 #include "HSVConverter.h"
 #include "HistogramCalculator.h"
+#include "utils.h"
 
 using namespace std;
 using namespace cv;
-
-
-template<typename T>
-ostream& operator<<(ostream &os, const vector<T> &vec) {
-    os << "[";
-    for(int i = 0; i < vec.size(); i++) {
-        os << vec[i] << (i == vec.size()-1 ? "" : ", ");
-    }
-    os << "]";
-    return os;
-}
-
 
 
 int main(int argc, char **argv) {
