@@ -6,6 +6,7 @@
 class ImageDistance {
 public:
     virtual double calc(cv::Mat hist1, cv::Mat hist2) const = 0;
+    virtual std::string get_class_name() = 0;
     virtual ~ImageDistance() {}
 };
 

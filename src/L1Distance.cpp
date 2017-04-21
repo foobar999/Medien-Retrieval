@@ -6,3 +6,7 @@ using namespace cv;
 double L1Distance::calc(Mat hist1, Mat hist2) const{
     return cv::norm(hist1, hist2, NORM_L2);
 }
+
+string L1Distance::get_class_name(){
+    return "L1Distance";
+}

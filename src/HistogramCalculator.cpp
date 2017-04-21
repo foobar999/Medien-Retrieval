@@ -15,6 +15,17 @@ Mat HistogramCalculator::calc(Mat hsv_img){
     vector<int> nbins_vec = {nbins[0], nbins[1], nbins[2]};
     vector<float> ranges_vec = {0, range[0], 0, range[1], 0, range[2]};
     calcHist(img_vec, use_all_channels, Mat(), res, nbins_vec, ranges_vec);
+
+    /*
+    TODO 1d-Histogramm?
+    Mat res1d(Size(1, res.total()), res.type());
+    int pos = 0;
+    for(int i = 0; i < nbins[0]; i++)
+        for(int j = 0; j < nbins[1]; j++)
+            for(int k = 0; k < nbins[2]; k++)
+                res1d.at<float>(0, pos++) = res.at<float>(i,j,k);
+    return res1d;
+    */
     return res;
 }
 
