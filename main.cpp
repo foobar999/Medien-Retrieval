@@ -32,27 +32,35 @@ int main(int argc, char **argv) {
 
     Vec3i nbins(16, 3, 3);
     HistogramCalculator hist_calc(nbins, HSVConverter::hsv_range);
-    vector<Histogram> hsv_hists;
+    vector<Mat> hsv_hists;
     for(Mat hsv_img : hsv_imgs) {
-        Histogram hist = hist_calc.calc(hsv_img);
-        hsv_hists.push_back(hist);
+        hsv_hists.push_back(hist_calc.calc(hsv_img));
     }
     cout << "calculated histograms" << endl;
 
+    vector<Mat> norm_hsv_hists;
+    for(Mat &hist : hsv_hists){
+        norm_hsv_hists.push_back(hist_calc.normalize(hist));
+    }
+    cout << "calculated normalized histograms" << endl;
+
     for(int img = 0; img < hsv_hists.size(); img++) {
-        int bin_sum = 0;
-        Histogram &hist = hsv_hists[img];
+        Mat &hist = hsv_hists[img];
+        Mat &norm_hist = norm_hsv_hists[img];
         cout << "histogram of " << img << ":" << endl;
-        for(int i = 0; i < hist.size(); i++) {
-            for(int j = 0; j < hist[i].size(); j++) {
-                for(int k = 0; k < hist[i][j].size(); k++) {
+        for(int i = 0; i < nbins[0]; i++) {
+            for(int j = 0; j < nbins[1]; j++) {
+                for(int k = 0; k < nbins[2]; k++) {
                     Vec3i bin(i, j, k);
-                    bin_sum += hist[i][j][k];
-                    cout << "bin " << bin << ": " << hist[i][j][k] << " repr " << hist_calc.calc_repr(bin) << endl;
+                    cout << "bin " << bin << ": abs " << hist.at<float>(i,j,k) << " norm " << norm_hist.at<float>(i,j,k);
+                    cout << " (repr " << hist_calc.calc_repr(bin) << ")" << endl;
                 }
             }
         }
-        cout << "bin sum " << bin_sum << " expected " << hsv_imgs[img].total() << endl;
+        int bin_sum_abs = sum(hist)[0];
+        float bin_sum_norm = sum(norm_hist)[0];
+        cout << "bin sum abs " << bin_sum_abs << " expected " << hsv_imgs[img].total() << endl;
+        cout << "bin sum norm " << bin_sum_norm << " expected 1" << endl;
     }
 
     for(int i = 0; i < imgs.size(); i++) {
