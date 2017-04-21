@@ -20,17 +20,16 @@ int main(int argc, char **argv) {
     vector<Mat> hsv_imgs = HSVConverter().convert_all(imgs);
     cout << "converted images to hsv space" << endl;
 
-    vector<float> maxs = {0, 0, 0};
+    Vec3f maxi(0, 0, 0);
     for(Mat hsv_img : hsv_imgs) {
         for(int i = 0; i < hsv_img.rows; i++) {
             for(int j = 0; j < hsv_img.cols; j++) {
-                maxs[0] = max(maxs[0], hsv_img.at<Vec3f>(i, j)[0]);
-                maxs[1] = max(maxs[1], hsv_img.at<Vec3f>(i, j)[1]);
-                maxs[2] = max(maxs[2], hsv_img.at<Vec3f>(i, j)[2]);
+                Vec3f ele = hsv_img.at<Vec3f>(i, j);
+                maxi = Vec3f(max(maxi[0],ele[0]), max(maxi[1],ele[1]), max(maxi[2],ele[2]));
             }
         }
     }
-    cout << "maximum hsv elements " << maxs << endl;
+    cout << "maximum hsv elements " << maxi << endl;
 
     Vec3i nbins(16, 3, 3);
     HistogramCalculator hist_calc(nbins, HSVConverter::hsv_range);
