@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "ImageDistance.h"
+#include "utils.h"
 
 class ImageSimilaritySorter {
 public:

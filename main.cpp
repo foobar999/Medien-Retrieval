@@ -6,6 +6,7 @@
 #include "L1Distance.h"
 #include "L2Distance.h"
 #include "ChiSqDistance.h"
+#include "HammingDistance.h"
 #include "QueryResultDisplayer.h"
 #include "utils.h"
 
@@ -73,7 +74,8 @@ int main(int argc, char **argv) {
     vector<ImageDistance*> distances = {
         new L1Distance(),
         new L2Distance(),
-        new ChiSqDistance()
+        new ChiSqDistance(),
+        new HammingDistance(0.5)
     };
     while(1) {
         cout << "Images:" << endl;
