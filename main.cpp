@@ -104,7 +104,8 @@ int main(int argc, char **argv) {
         for(int i : ids_sorted){
             imgs_sorted.push_back(imgs[i]);
         }
-        QueryResultDisplayer().display(imgs[query_id], imgs_sorted);
+        string winname = "img " + imgnames[query_id] + ", " + dist->get_class_name();
+        QueryResultDisplayer().display(imgs[query_id], imgs_sorted, winname);
     }
 
     return 0;
