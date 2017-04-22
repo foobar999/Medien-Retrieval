@@ -70,7 +70,7 @@ int main(int argc, char **argv) {
         new L1Distance(),
         new L2Distance(),
         new ChiSqDistance(),
-        new HammingDistance(0.5)
+        new HammingDistance(10)
     };
     while(1) {
         cout << "Images:" << endl;

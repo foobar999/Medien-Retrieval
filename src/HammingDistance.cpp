@@ -3,7 +3,7 @@
 using namespace cv;
 using namespace std;
 
-HammingDistance::HammingDistance(double thresh){
+HammingDistance::HammingDistance(int thresh){
     this->thresh = thresh;
 }
 
@@ -13,7 +13,8 @@ double HammingDistance::calc(const ImageData &dat1, const ImageData &dat2){
     Mat thresh_h1 = dat1.abs_hist > thresh;
     Mat thresh_h2 = dat2.abs_hist > thresh;
     Mat thresh_diff = diff > thresh;
-    int denom = countNonZero(thresh_h1) * countNonZero(thresh_h2);
+    //cout << countNonZero(thresh_diff) << "/(" << countNonZero(thresh_h1) << "," << countNonZero(thresh_h2) << ")" << endl;
+    double denom = countNonZero(thresh_h1) * countNonZero(thresh_h2);
     return denom == 0 ? std::numeric_limits<double>::infinity() : countNonZero(thresh_diff) / denom;
 }
 
