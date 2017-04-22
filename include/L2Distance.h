@@ -6,7 +6,7 @@
 
 class L2Distance : public ImageDistance {
 public:
-    double calc(cv::Mat hist1, cv::Mat hist2) const;
+    double calc(cv::Mat hist1, cv::Mat hist2);
     std::string get_class_name();
 };
 

@@ -3,7 +3,7 @@
 using namespace std;
 using namespace cv;
 
-double L1Distance::calc(Mat hist1, Mat hist2) const{
+double L1Distance::calc(Mat hist1, Mat hist2){
     return cv::norm(hist1, hist2, NORM_L1);
 }
 

@@ -3,7 +3,7 @@
 using namespace std;
 using namespace cv;
 
-vector<int> ImageSimilaritySorter::sort_by_distance(int query_id, const vector<Mat> &histograms, const ImageDistance &dist) {
+vector<int> ImageSimilaritySorter::sort_by_distance(int query_id, const vector<Mat> &histograms, ImageDistance &dist) {
 
     vector<double> dists;
     for(int i = 0; i < histograms.size(); i++){
