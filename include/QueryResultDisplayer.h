@@ -6,7 +6,8 @@
 
 class QueryResultDisplayer {
 public:
-    void display(cv::Mat query_img, const std::vector<cv::Mat> &results, std::string winname = "most similar results");
+    void display(cv::Mat query_img, const std::vector<cv::Mat> &results,
+                 cv::Size thumb_size = cv::Size(200,200), std::string winname = "most similar results");
 
 };
 

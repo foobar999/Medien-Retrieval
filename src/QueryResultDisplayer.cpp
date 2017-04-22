@@ -3,8 +3,7 @@
 using namespace cv;
 using namespace std;
 
-void QueryResultDisplayer::display(Mat query_img, const vector<Mat> &results, string winname) {
-    Size thumb_size(200, 200);
+void QueryResultDisplayer::display(Mat query_img, const vector<Mat> &results, Size thumb_size, string winname) {
     Mat query_thumb;
     cv::resize(query_img, query_thumb, thumb_size);
     vector<Mat> results_thumbs(results.size());
