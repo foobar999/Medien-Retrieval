@@ -18,7 +18,7 @@ Mat HistogramCalculator::calc(Mat hsv_img){
 
     // convert 3D-histogram to 1D-histogram
     // of size 1 x (number of hist-elements) (row vector)
-    Mat mat1d = Mat(1, res.total(), res.type(), (void*)res.data);
+    Mat mat1d(1, res.total(), res.type(), (void*)res.data);
     return mat1d.clone();
 }
 
