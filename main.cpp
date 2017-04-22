@@ -95,17 +95,27 @@ int main(int argc, char **argv) {
         vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, norm_hsv_hists, L1Distance());
         cout << "images similar to " << query_id << ": " << ids_sorted << endl;
 
-        vector<Mat> thumbnails;
-        for(int i : ids_sorted) {
-            Mat res;
-            cv::resize(imgs[i], res, Size(200, 200));
-            thumbnails.push_back(res);
+        Size thumb_size(200, 200);
+        vector<Mat> thumbnails(imgs.size());
+        for(int i = 0; i < thumbnails.size(); i++) {
+            cv::resize(imgs[i], thumbnails[i], thumb_size);
         }
-        Mat conc_thumbnails;
-        hconcat(thumbnails, conc_thumbnails);
+        vector<Mat> thumbnails_sorted(imgs.size());
+        for(int i = 0; i < thumbnails_sorted.size(); i++){
+            thumbnails_sorted[i] = thumbnails[ids_sorted[i]];
+        }
+        // construct displayed img with 2 rows:
+        // upper row: thumbnail of query img + padding
+        // lower row: thumbnails of most similar images, sorted
+        Mat lower_thumb_row, upper_thumb_row;
+        hconcat(thumbnails_sorted, lower_thumb_row);
+        Mat query_thumb_padding(thumb_size.height, thumb_size.width*(imgs.size()-1), CV_8UC3, Scalar::all(0));
+        hconcat(thumbnails[query_id], query_thumb_padding, upper_thumb_row);
+        Mat displayed_img;
+        vconcat(upper_thumb_row, lower_thumb_row, displayed_img);
 
         const char *winname = "most similar images";
-        imshow(winname, conc_thumbnails);
+        imshow(winname, displayed_img);
 
         waitKey();
         cvDestroyWindow(winname);
