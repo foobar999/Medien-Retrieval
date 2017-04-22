@@ -5,6 +5,7 @@
 #include "HistogramCalculator.h"
 #include "ImageSimilaritySorter.h"
 #include "L1Distance.h"
+#include "QueryResultDisplayer.h"
 #include "utils.h"
 
 using namespace std;
@@ -85,40 +86,24 @@ int main(int argc, char **argv) {
             cout << "index of query image : ";
             cin >> query_id;
         } while(cin.fail() || query_id < 0 || query_id >= imgs.size());
+        cout << "query image: " << imgnames[query_id] << endl;
 
         int distance_id;
         do {
             cout << "index of distance : ";
             cin >> distance_id;
         } while(cin.fail() || distance_id < 0 || distance_id >= distances.size());
+        ImageDistance *dist = distances[distance_id];
+        cout << "image distance: " << dist->get_class_name() << endl;
 
-        vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, norm_hsv_hists, L1Distance());
+        vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, norm_hsv_hists, *dist);
         cout << "images similar to " << query_id << ": " << ids_sorted << endl;
 
-        Size thumb_size(200, 200);
-        vector<Mat> thumbnails(imgs.size());
-        for(int i = 0; i < thumbnails.size(); i++) {
-            cv::resize(imgs[i], thumbnails[i], thumb_size);
+        vector<Mat> imgs_sorted;
+        for(int i : ids_sorted){
+            imgs_sorted.push_back(imgs[i]);
         }
-        vector<Mat> thumbnails_sorted(imgs.size());
-        for(int i = 0; i < thumbnails_sorted.size(); i++){
-            thumbnails_sorted[i] = thumbnails[ids_sorted[i]];
-        }
-        // construct displayed img with 2 rows:
-        // upper row: thumbnail of query img + padding
-        // lower row: thumbnails of most similar images, sorted
-        Mat lower_thumb_row, upper_thumb_row;
-        hconcat(thumbnails_sorted, lower_thumb_row);
-        Mat query_thumb_padding(thumb_size.height, thumb_size.width*(imgs.size()-1), CV_8UC3, Scalar::all(0));
-        hconcat(thumbnails[query_id], query_thumb_padding, upper_thumb_row);
-        Mat displayed_img;
-        vconcat(upper_thumb_row, lower_thumb_row, displayed_img);
-
-        const char *winname = "most similar images";
-        imshow(winname, displayed_img);
-
-        waitKey();
-        cvDestroyWindow(winname);
+        QueryResultDisplayer().display(imgs[query_id], imgs_sorted);
     }
 
     return 0;
