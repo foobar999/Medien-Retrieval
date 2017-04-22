@@ -52,16 +52,6 @@ int main(int argc, char **argv) {
         Mat &hist = hsv_hists[img];
         Mat &norm_hist = norm_hsv_hists[img];
         cout << "histogram of " << img << ":" << endl;
-        /*
-        for(int i = 0; i < nbins[0]; i++) {
-            for(int j = 0; j < nbins[1]; j++) {
-                for(int k = 0; k < nbins[2]; k++) {
-                    Vec3i bin(i, j, k);
-                    cout << "bin " << bin << ": abs " << hist.at<float>(i,j,k) << " norm " << norm_hist.at<float>(i,j,k);
-                    cout << " (repr " << hist_calc.calc_repr(bin) << ")" << endl;
-                }
-            }
-        }*/
         for(int bin = 0; bin < hist.total(); bin++) {
             cout << "bin " << bin << ": abs " << hist.at<float>(0,bin) << " norm " << norm_hist.at<float>(0,bin) << endl;
         }
@@ -69,6 +59,11 @@ int main(int argc, char **argv) {
         float bin_sum_norm = sum(norm_hist)[0];
         cout << "bin sum abs " << bin_sum_abs << " expected " << hsv_imgs[img].total() << endl;
         cout << "bin sum norm " << bin_sum_norm << " expected 1" << endl;
+    }
+
+    vector<ImageData> imgs_data;
+    for(int i = 0; i < imgs.size(); i++){
+        imgs_data.emplace_back(imgs[i], hsv_hists[i], norm_hsv_hists[i]);
     }
 
     vector<ImageDistance*> distances = {
@@ -101,7 +96,7 @@ int main(int argc, char **argv) {
         ImageDistance *dist = distances[distance_id];
         cout << "image distance: " << dist->get_class_name() << endl;
 
-        vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, norm_hsv_hists, *dist);
+        vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, imgs_data, *dist);
         cout << "images similar to " << query_id << ": " << ids_sorted << endl;
 
         vector<Mat> imgs_sorted;

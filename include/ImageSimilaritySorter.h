@@ -7,7 +7,7 @@
 
 class ImageSimilaritySorter {
 public:
-    std::vector<int> sort_by_distance(int query_id, const std::vector<cv::Mat> &histograms, ImageDistance &dist);
+    std::vector<int> sort_by_distance(int query_id, const std::vector<ImageData> &histograms, ImageDistance &dist);
 };
 
 #endif // IMAGESIMILARITYSORTER_H

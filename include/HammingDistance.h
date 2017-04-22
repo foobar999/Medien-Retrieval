@@ -7,7 +7,7 @@
 class HammingDistance : public ImageDistance {
 public:
     HammingDistance(double thresh);
-    double calc(cv::Mat hist1, cv::Mat hist2);
+    double calc(const ImageData &dat1, const ImageData &dat2);
     std::string get_class_name();
 
 protected:

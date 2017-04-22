@@ -3,8 +3,8 @@
 using namespace std;
 using namespace cv;
 
-double L1Distance::calc(Mat hist1, Mat hist2){
-    return cv::norm(hist1, hist2, NORM_L1);
+double L1Distance::calc(const ImageData &dat1, const ImageData &dat2){
+    return cv::norm(dat1.norm_hist, dat2.norm_hist, NORM_L1);
 }
 
 string L1Distance::get_class_name(){
