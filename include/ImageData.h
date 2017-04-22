@@ -5,8 +5,9 @@
 
 class ImageData {
 public:
-    ImageData(cv::Mat img, cv::Mat abs_hist, cv::Mat norm_hist);
-    cv::Mat img;
+    ImageData(cv::Mat rgb_img, cv::Mat hsv_img, cv::Mat abs_hist, cv::Mat norm_hist);
+    cv::Mat rgb_img;
+    cv::Mat hsv_img;
     cv::Mat abs_hist;
     cv::Mat norm_hist;
 };

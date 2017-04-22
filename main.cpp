@@ -8,6 +8,7 @@
 #include "ChiSqDistance.h"
 #include "HammingDistance.h"
 #include "QueryResultDisplayer.h"
+#include "MeanColorDistance.h"
 #include "utils.h"
 
 using namespace std;
@@ -63,14 +64,15 @@ int main(int argc, char **argv) {
 
     vector<ImageData> imgs_data;
     for(int i = 0; i < imgs.size(); i++){
-        imgs_data.emplace_back(imgs[i], hsv_hists[i], norm_hsv_hists[i]);
+        imgs_data.emplace_back(imgs[i], hsv_imgs[i], hsv_hists[i], norm_hsv_hists[i]);
     }
 
     vector<ImageDistance*> distances = {
         new L1Distance(),
         new L2Distance(),
         new ChiSqDistance(),
-        new HammingDistance(10)
+        new HammingDistance(10), // TODO parameterized
+        new MeanColorDistance()
     };
     while(1) {
         cout << "Images:" << endl;
