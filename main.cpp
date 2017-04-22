@@ -1,10 +1,10 @@
 #include <iostream>
-#include <opencv2/opencv.hpp>
 #include "ImgReader.h"
 #include "HSVConverter.h"
 #include "HistogramCalculator.h"
 #include "ImageSimilaritySorter.h"
 #include "L1Distance.h"
+#include "L2Distance.h"
 #include "QueryResultDisplayer.h"
 #include "utils.h"
 
@@ -70,7 +70,8 @@ int main(int argc, char **argv) {
     }
 
     vector<ImageDistance*> distances = {
-        new L1Distance()
+        new L1Distance(),
+        new L2Distance()
     };
     while(1) {
         cout << "Images:" << endl;
