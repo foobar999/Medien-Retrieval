@@ -16,6 +16,9 @@ Mat HistogramCalculator::calc(Mat hsv_img){
     vector<float> ranges_vec = {0, range[0], 0, range[1], 0, range[2]};
     calcHist(img_vec, use_all_channels, Mat(), res, nbins_vec, ranges_vec);
 
+    //dimensions of mat with dim 3+
+    //cout << "(" << res.size[0] << "," << res.size[1] << "," << res.size[2] << ")" << endl;
+
     // convert 3D-histogram to 1D-histogram
     // of size 1 x (number of hist-elements) (row vector)
     Mat mat1d(1, res.total(), res.type(), (void*)res.data);
