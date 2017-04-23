@@ -9,6 +9,7 @@
 #include "HammingDistance.h"
 #include "QueryResultDisplayer.h"
 #include "MeanColorDistance.h"
+#include "VarianceColorDistance.h"
 #include "utils.h"
 
 using namespace std;
@@ -72,7 +73,8 @@ int main(int argc, char **argv) {
         new L2Distance(),
         new ChiSqDistance(),
         new HammingDistance(10), // TODO parameterized
-        new MeanColorDistance()
+        new MeanColorDistance(),
+        new VarianceColorDistance()
     };
     while(1) {
         cout << "Images:" << endl;
