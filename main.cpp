@@ -54,9 +54,11 @@ int main(int argc, char **argv) {
         Mat &hist = hsv_hists[img];
         Mat &norm_hist = norm_hsv_hists[img];
         cout << "histogram of " << img << ":" << endl;
+        /*
         for(int bin = 0; bin < hist.total(); bin++) {
             cout << "bin " << bin << ": abs " << hist.at<float>(0,bin) << " norm " << norm_hist.at<float>(0,bin) << endl;
         }
+        */
         int bin_sum_abs = sum(hist)[0];
         float bin_sum_norm = sum(norm_hist)[0];
         cout << "bin sum abs " << bin_sum_abs << " expected " << hsv_imgs[img].total() << endl;
