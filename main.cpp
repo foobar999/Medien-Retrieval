@@ -84,6 +84,7 @@ int main(int argc, char **argv) {
             cout << i << ": " << imgnames[i] << endl;
         }
         cout << endl << "Distances:" << endl;
+        cout << "-1: all distances" << endl;
         for(int i = 0; i < distances.size(); i++) {
             cout << i << ": " << distances[i]->get_class_name() << endl;
         }
@@ -98,19 +99,32 @@ int main(int argc, char **argv) {
         do {
             cout << "index of distance : ";
             cin >> distance_id;
-        } while(cin.fail() || distance_id < 0 || distance_id >= distances.size());
-        ImageDistance *dist = distances[distance_id];
-        cout << "image distance: " << dist->get_class_name() << endl;
+            cout << cin.fail() << distance_id << " " << distances.size() << endl;
+        } while(cin.fail() || distance_id < -1 || distance_id >= (int)distances.size());
 
-        vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, imgs_data, *dist);
-        cout << "images similar to " << query_id << ": " << ids_sorted << endl;
-
-        vector<Mat> imgs_sorted;
-        for(int i : ids_sorted){
-            imgs_sorted.push_back(imgs[i]);
+        string winname;
+        vector<ImageDistance*> dists_to_calc;
+        if(distance_id > -1){
+            dists_to_calc.push_back(distances[distance_id]);
+            winname = "img " + imgnames[query_id] + ", " + distances[distance_id]->get_class_name();
         }
-        string winname = "img " + imgnames[query_id] + ", " + dist->get_class_name();
-        QueryResultDisplayer().display(imgs[query_id], imgs_sorted, winname);
+        else {
+            dists_to_calc = distances;
+            winname = "all distances";
+        }
+
+        vector<vector<Mat>> results_per_dist;
+        for(ImageDistance *current_dist : dists_to_calc){
+            cout << "image distance: " << current_dist->get_class_name() << endl;
+            vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, imgs_data, *current_dist);
+            cout << "images similar to " << query_id << ": " << ids_sorted << endl;
+            vector<Mat> imgs_sorted;
+            for(int i : ids_sorted){
+                imgs_sorted.push_back(imgs[i]);
+            }
+            results_per_dist.push_back(imgs_sorted);
+        }
+        QueryResultDisplayer().display(imgs[query_id], results_per_dist, winname);
     }
 
     return 0;
