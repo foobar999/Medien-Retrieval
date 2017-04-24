@@ -10,6 +10,7 @@ public:
                  cv::Size thumb_size = cv::Size(100,100));
 protected:
     cv::Mat create_query_img_thumb_row(cv::Mat query_img, cv::Size thumb_size, int num_padding_thumbs);
+    cv::Mat create_query_result_thumb_row(const std::vector<cv::Mat> &result, cv::Size thumb_size);
 };
 
 #endif // QUERYRESULTDISPLAYER_H
