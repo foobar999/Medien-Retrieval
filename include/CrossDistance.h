@@ -1,7 +1,7 @@
 #ifndef CROSSDISTANCE_H
 #define CROSSDISTANCE_H
 
-#include "../include/ImageDistance.h""
+#include "../include/ImageDistance.h"
 
 
 class CrossDistance : public ImageDistance {
