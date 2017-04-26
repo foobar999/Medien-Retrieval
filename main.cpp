@@ -13,6 +13,7 @@
 #include "include/CrossDistance.h"
 #include "include/CrosstalkCalculator.h"
 #include "include/utils.h"
+#include "include/JD.h"
 
 using namespace std;
 using namespace cv;
@@ -81,7 +82,8 @@ int main(int argc, char **argv) {
         new HammingDistance(10), // TODO parameterized
         new MeanColorDistance(),
         new VarianceColorDistance(),
-        new CrossDistance(crosstalk_mat)
+        new CrossDistance(crosstalk_mat),
+        new JD()
     };
     while(1) {
         cout << "Images:" << endl;
