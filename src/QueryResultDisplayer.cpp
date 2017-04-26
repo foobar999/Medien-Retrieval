@@ -1,4 +1,4 @@
-#include "QueryResultDisplayer.h"
+#include "../include/QueryResultDisplayer.h"
 
 using namespace cv;
 using namespace std;

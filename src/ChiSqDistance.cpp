@@ -1,4 +1,4 @@
-#include "ChiSqDistance.h"
+#include "../include/ChiSqDistance.h"
 
 using namespace cv;
 using namespace std;

@@ -1,16 +1,16 @@
 #include <iostream>
-#include "ImgReader.h"
-#include "HSVConverter.h"
-#include "HistogramCalculator.h"
-#include "ImageSimilaritySorter.h"
-#include "L1Distance.h"
-#include "L2Distance.h"
-#include "ChiSqDistance.h"
-#include "HammingDistance.h"
-#include "QueryResultDisplayer.h"
-#include "MeanColorDistance.h"
-#include "VarianceColorDistance.h"
-#include "utils.h"
+#include "include/ImgReader.h"
+#include "include/HSVConverter.h"
+#include "include/HistogramCalculator.h"
+#include "include/ImageSimilaritySorter.h"
+#include "include/L1Distance.h"
+#include "include/L2Distance.h"
+#include "include/ChiSqDistance.h"
+#include "include/HammingDistance.h"
+#include "include/QueryResultDisplayer.h"
+#include "include/MeanColorDistance.h"
+#include "include/VarianceColorDistance.h"
+#include "include/utils.h"
 
 using namespace std;
 using namespace cv;

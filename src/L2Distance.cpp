@@ -1,4 +1,4 @@
-#include "L2Distance.h"
+#include "../include/L2Distance.h"
 
 using namespace std;
 using namespace cv;

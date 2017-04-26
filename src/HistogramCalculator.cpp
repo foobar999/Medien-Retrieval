@@ -1,4 +1,4 @@
-#include "HistogramCalculator.h"
+#include "../include/HistogramCalculator.h"
 
 using namespace std;
 using namespace cv;

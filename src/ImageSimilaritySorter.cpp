@@ -1,4 +1,4 @@
-#include "ImageSimilaritySorter.h"
+#include "../include/ImageSimilaritySorter.h"
 
 using namespace std;
 using namespace cv;

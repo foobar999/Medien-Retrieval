@@ -1,4 +1,4 @@
-#include "ImageData.h"
+#include "../include/ImageData.h"
 
 ImageData::ImageData(cv::Mat rgb_img, cv::Mat hsv_img, cv::Mat abs_hist, cv::Mat norm_hist){
     this->rgb_img = rgb_img;

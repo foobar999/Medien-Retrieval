@@ -1,4 +1,4 @@
-#include "HammingDistance.h"
+#include "../include/HammingDistance.h"
 
 using namespace cv;
 using namespace std;

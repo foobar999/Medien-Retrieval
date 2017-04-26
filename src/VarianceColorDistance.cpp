@@ -1,4 +1,4 @@
-#include "VarianceColorDistance.h"
+#include "../include/VarianceColorDistance.h"
 
 using namespace cv;
 using namespace std;

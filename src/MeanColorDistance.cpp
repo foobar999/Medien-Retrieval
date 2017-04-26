@@ -1,4 +1,4 @@
-#include "MeanColorDistance.h"
+#include "../include/MeanColorDistance.h"
 
 using namespace std;
 using namespace cv;
