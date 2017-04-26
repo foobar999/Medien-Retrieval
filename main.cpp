@@ -10,6 +10,7 @@
 #include "include/QueryResultDisplayer.h"
 #include "include/MeanColorDistance.h"
 #include "include/VarianceColorDistance.h"
+#include "include/CrossDistance.h"
 #include "include/CrosstalkCalculator.h"
 #include "include/utils.h"
 
@@ -79,7 +80,8 @@ int main(int argc, char **argv) {
         new ChiSqDistance(),
         new HammingDistance(10), // TODO parameterized
         new MeanColorDistance(),
-        new VarianceColorDistance()
+        new VarianceColorDistance(),
+        new CrossDistance(crosstalk_mat)
     };
     while(1) {
         cout << "Images:" << endl;

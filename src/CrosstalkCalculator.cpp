@@ -5,7 +5,7 @@ using namespace cv;
 using namespace std;
 
 Mat CrosstalkCalculator::calc(Vec3i nbins, Vec3f range){
-    vector<Vec3f> sums;
+    vector<Vec3f> centroids;
     for(int i = 0; i < nbins[0]; i++){
         for(int j = 0; j < nbins[1]; j++){
             for(int k = 0; k < nbins[2]; k++){
@@ -16,18 +16,34 @@ Mat CrosstalkCalculator::calc(Vec3i nbins, Vec3f range){
                     sum += calc_repr(bin + offset, nbins, range);
                 }
                 cv::divide(sum, offsets.size(), sum);
-                sums.push_back(sum);
+                centroids.push_back(sum);
                 cout << "bin: " << bin << " color: " << calc_repr(bin, nbins, range) << " sum " << sum << endl;
     }}}
-    Mat res(sums.size(), sums.size(), CV_32F);
-    for(int i = 0; i < sums.size(); i++){
-        for(int j = 0; j < sums.size(); j++){
+    Mat res(centroids.size(), centroids.size(), CV_32F);
+    double dmax = 0;
+    for(int i = 0; i < centroids.size(); i++){
+        for(int j = 0; j < centroids.size(); j++){
 //            res.at<float>(i, j) = cv::norm(sums[i], sums[j]);
-            res.at<float>(i, j) = d_cyl(sums[i], sums[j]);
-
-            }
+            double dist = d_cyl(centroids[i], centroids[j]);
+            res.at<float>(i, j) = dist;
+            dmax = max(dmax, dist);
+        }
     }
-    cout << res << endl;
+    cout << "dmax " << dmax << endl;
+    /*for(int i = 0; i < centroids.size(); i++){
+        for(int j = 0; j < centroids.size(); j++){
+            res.at<float>(i, j) = 1 - res.at<float>(i, j) / dmax;
+            cout << "d(" << i << "," << j << "): " << res.at<float>(i, j) << endl;
+        }
+    }*/
+    //scaleAdd(res, -1/dmax, 1, res);
+    res = 1 - res / dmax;
+    /*for(int i = 0; i < centroids.size(); i++){
+        for(int j = 0; j < centroids.size(); j++){
+            cout << "d(" << i << "," << j << "): " << res.at<float>(i, j) << endl;
+        }
+    }*/
+
     return res;
 }
 
