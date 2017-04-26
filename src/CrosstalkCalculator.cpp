@@ -1,5 +1,6 @@
 #include "../include/CrosstalkCalculator.h"
 
+
 using namespace cv;
 using namespace std;
 
@@ -21,11 +22,12 @@ Mat CrosstalkCalculator::calc(Vec3i nbins, Vec3f range){
     Mat res(sums.size(), sums.size(), CV_32F);
     for(int i = 0; i < sums.size(); i++){
         for(int j = 0; j < sums.size(); j++){
-            res.at<float>(i, j) = cv::norm(sums[i], sums[j]);
+//            res.at<float>(i, j) = cv::norm(sums[i], sums[j]);
+            res.at<float>(i, j) = d_cyl(sums[i], sums[j]);
 
             }
     }
-    cout << res.size() << endl;
+    cout << res << endl;
     return res;
 }
 

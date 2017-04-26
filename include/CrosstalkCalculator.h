@@ -2,6 +2,7 @@
 #define CROSSTALKCALCULATOR_H
 
 #include <opencv2/opencv.hpp>
+#include "../include/utils.h"
 
 class CrosstalkCalculator
 {
