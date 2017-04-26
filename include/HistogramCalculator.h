@@ -10,7 +10,6 @@ public:
     cv::Mat calc(cv::Mat hsv_img);
 
     cv::Mat normalize(cv::Mat hist);
-    cv::Vec3f calc_repr(cv::Vec3i bin);
 protected:
     cv::Vec3i nbins;
     cv::Vec3f range;

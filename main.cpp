@@ -10,6 +10,7 @@
 #include "include/QueryResultDisplayer.h"
 #include "include/MeanColorDistance.h"
 #include "include/VarianceColorDistance.h"
+#include "include/CrosstalkCalculator.h"
 #include "include/utils.h"
 
 using namespace std;
@@ -43,6 +44,8 @@ int main(int argc, char **argv) {
         hsv_hists.push_back(hist_calc.calc(hsv_img));
     }
     cout << "calculated histograms" << endl;
+
+    Mat crosstalk_mat = CrosstalkCalculator().calc(nbins, HSVConverter::hsv_range);
 
     vector<Mat> norm_hsv_hists;
     for(Mat &hist : hsv_hists) {
