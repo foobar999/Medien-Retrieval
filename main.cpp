@@ -22,7 +22,7 @@ using namespace cv;
 
 
 int main(int argc, char **argv) {
-    string dir = "data";
+    string dir = "data/2";
     vector<string> imgnames = ImgReader().get_filenames_from_dir(dir);
     vector<Mat> imgs = ImgReader().read_imgs_from_filenames(imgnames);
     cout << "read images: " << endl << imgnames << endl;

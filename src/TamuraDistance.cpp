@@ -15,7 +15,7 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 	Mat S_best_maxval(dat1.rgb_img.size(), CV_64F, Scalar(0));
 
 	for (int k = kmin; k <= kmax; k++) {
-
+        cout << "k " << k << endl;
 		Mat A_k(dat1.rgb_img.size(), CV_64F);
 		int k_pow = pow(2, k - 1);
 		for (int x = 0; x < dat1.rgb_img.rows; x++) {
@@ -56,9 +56,10 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 	//Mat F_crs;
 	//normalize(S_best_k, F_crs, )
 
-	cout << "S_best_k" << S_best_k << endl;
-
-
+	//cout << "S_best_k" << S_best_k << endl;
+    //double F_crs = cv::sum(S_best_k)[0] / S_best_k.total();
+    double F_crs = mean(S_best_k)[0];
+    cout << F_crs << endl;
 
 	/*
 	//Mat res;
@@ -77,7 +78,7 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 	//*/
 
 
-	return 0.0;
+	return F_crs;
 }
 
 string TamuraDistance::get_class_name() {
