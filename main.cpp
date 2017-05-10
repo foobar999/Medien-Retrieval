@@ -15,6 +15,7 @@
 #include "include/utils.h"
 #include "include/JD.h"
 #include "include/EMD.h"
+#include "include/TamuraDistance.h"
 
 using namespace std;
 using namespace cv;
@@ -85,7 +86,8 @@ int main(int argc, char **argv) {
         new VarianceColorDistance(),
         new CrossDistance(crosstalk_mat),
         new JD(),
-        new ::EMD(crosstalk_mat)
+        new ::EMD(crosstalk_mat),
+        new TamuraDistance(1, 4)
     };
     while(1) {
         cout << "Images:" << endl;

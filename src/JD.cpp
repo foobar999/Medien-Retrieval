@@ -1,4 +1,5 @@
-#include "JD.h"
+#include "../include/JD.h"
+
 using namespace cv;
 using namespace std;
 
