@@ -12,6 +12,7 @@ public:
 protected:
 	int kmin, kmax;
     double calc_granularity(cv::Mat bgr_img);
+    cv::Mat translate_img(cv::Mat img, int x, int y);
 };
 
 #endif // TAMURADISTANCE_H
