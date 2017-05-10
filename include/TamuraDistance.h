@@ -11,7 +11,7 @@ public:
 	std::string get_class_name();
 protected:
 	int kmin, kmax;
-
+    double calc_granularity(cv::Mat bgr_img);
 };
 
 #endif // TAMURADISTANCE_H

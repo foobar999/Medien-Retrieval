@@ -5,21 +5,37 @@ using namespace std;
 
 double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 
-	vector<Mat> A_k_list;
-	vector<Mat> E_k_list;
+    double F_crs1 = calc_granularity(dat1.rgb_img);
+    double F_crs2 = calc_granularity(dat2.rgb_img);
+    cout << "F_crs: " << Vec2d(F_crs1, F_crs2) << endl;
+
+    // TODO normalisierung
+    // TODO vermeide mehrfachberechnung für 1
+    // TODO performance?
+    return fabs(F_crs1 - F_crs2);
+}
+
+string TamuraDistance::get_class_name() {
+	return "Tamura-Granularity-Distance";
+}
+
+
+double TamuraDistance::calc_granularity(Mat bgr_img){
+    //vector<Mat> A_k_list;
+	//vector<Mat> E_k_list;
 
 	Mat gray_img;
-	cvtColor(dat1.rgb_img, gray_img, CV_BGR2GRAY);
+	cvtColor(bgr_img, gray_img, CV_BGR2GRAY);
 
-	Mat S_best_k(dat1.rgb_img.size(), CV_32S);
-	Mat S_best_maxval(dat1.rgb_img.size(), CV_64F, Scalar(0));
+	Mat S_best_k(bgr_img.size(), CV_32S);
+	Mat S_best_maxval(bgr_img.size(), CV_64F, Scalar(0));
 
 	for (int k = kmin; k <= kmax; k++) {
         cout << "k " << k << endl;
-		Mat A_k(dat1.rgb_img.size(), CV_64F);
+		Mat A_k(bgr_img.size(), CV_64F);
 		int k_pow = pow(2, k - 1);
-		for (int x = 0; x < dat1.rgb_img.rows; x++) {
-			for (int y = 0; y < dat1.rgb_img.cols; y++) {
+		for (int x = 0; x < bgr_img.rows; x++) {
+			for (int y = 0; y < bgr_img.cols; y++) {
 
 				double sum = 0;
 				for (int i = x - k_pow; i < x + k_pow; i++) {
@@ -33,11 +49,11 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 
 			}
 		}
-		A_k_list.push_back(A_k);
+		//A_k_list.push_back(A_k);
 
-		Mat E_k_h(dat1.rgb_img.size(), CV_64F), E_k_v(dat1.rgb_img.size(), CV_64F);
-		for (int x = 0; x < dat1.rgb_img.rows; x++) {
-			for (int y = 0; y < dat1.rgb_img.cols; y++) {
+		Mat E_k_h(bgr_img.size(), CV_64F), E_k_v(bgr_img.size(), CV_64F);
+		for (int x = 0; x < bgr_img.rows; x++) {
+			for (int y = 0; y < bgr_img.cols; y++) {
 
 				E_k_h.at<double>(x, y) = fabs(A_k.at<double>(borderInterpolate(x + k_pow, A_k.rows, BORDER_REFLECT_101), borderInterpolate(y, A_k.cols, BORDER_REFLECT_101)) - A_k.at<double>(borderInterpolate(x - k_pow, A_k.rows, BORDER_REFLECT_101), borderInterpolate(y, A_k.cols, BORDER_REFLECT_101)));
 				E_k_v.at<double>(x, y) = fabs(A_k.at<double>(borderInterpolate(x, A_k.rows, BORDER_REFLECT_101), borderInterpolate(y + k_pow, A_k.cols, BORDER_REFLECT_101)) - A_k.at<double>(borderInterpolate(x, A_k.rows, BORDER_REFLECT_101), borderInterpolate(y - k_pow, A_k.cols, BORDER_REFLECT_101)));
@@ -49,17 +65,12 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 				}
 			}
 		}
-		E_k_list.push_back(E_k_h);
-		E_k_list.push_back(E_k_v);
+		//E_k_list.push_back(E_k_h);
+		//E_k_list.push_back(E_k_v);
 	}
 
 	//Mat F_crs;
 	//normalize(S_best_k, F_crs, )
-
-	//cout << "S_best_k" << S_best_k << endl;
-    //double F_crs = cv::sum(S_best_k)[0] / S_best_k.total();
-    double F_crs = mean(S_best_k)[0];
-    cout << F_crs << endl;
 
 	/*
 	//Mat res;
@@ -77,10 +88,8 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 	return 8;
 	//*/
 
+	//cout << "S_best_k" << S_best_k << endl;
+    //double F_crs = cv::sum(S_best_k)[0] / S_best_k.total();
+    return mean(S_best_k)[0];
 
-	return F_crs;
-}
-
-string TamuraDistance::get_class_name() {
-	return "Tamura-Granularity-Distance";
 }
