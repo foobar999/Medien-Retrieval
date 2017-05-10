@@ -34,6 +34,7 @@ double TamuraDistance::calc_granularity(Mat bgr_img){
         cout << "k " << k << endl;
 		Mat A_k(bgr_img.size(), CV_64F);
 		int k_pow = pow(2, k - 1);
+		/*
 		for (int x = 0; x < bgr_img.rows; x++) {
 			for (int y = 0; y < bgr_img.cols; y++) {
 
@@ -49,6 +50,10 @@ double TamuraDistance::calc_granularity(Mat bgr_img){
 
 			}
 		}
+		*/
+
+        boxFilter(gray_img, A_k, CV_64F, Size(2*k_pow,2*k_pow), Point(-1,-1), true, BORDER_REFLECT_101);
+        //A_k /= pow(2, 2 * k);
 		//A_k_list.push_back(A_k);
 
 		Mat E_k_h(bgr_img.size(), CV_64F), E_k_v(bgr_img.size(), CV_64F);
