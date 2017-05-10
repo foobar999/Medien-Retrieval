@@ -84,6 +84,7 @@ double TamuraDistance::calc_granularity(Mat bgr_img){
 		Mat E_k_v;
 		cv::absdiff(translate_img(A_k, 0, k_pow), translate_img(A_k, 0, -k_pow), E_k_v);
 
+        /*
 		for (int x = 0; x < bgr_img.rows; x++) {
 			for (int y = 0; y < bgr_img.cols; y++) {
 				double maxval = max(E_k_h.at<double>(x, y), E_k_v.at<double>(x, y));
@@ -93,6 +94,10 @@ double TamuraDistance::calc_granularity(Mat bgr_img){
 				}
 			}
 		}
+		*/
+		MatExpr maxi_mask = E_k_h > S_best_maxval | E_k_v > S_best_maxval;
+		S_best_k.setTo(pow(2, k), maxi_mask);
+		S_best_maxval = cv::max(S_best_maxval, cv::max(E_k_h, E_k_v));
 
 		//E_k_list.push_back(E_k_h);
 		//E_k_list.push_back(E_k_v);

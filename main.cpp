@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 #include "include/ImgReader.h"
 #include "include/HSVConverter.h"
 #include "include/HistogramCalculator.h"
@@ -17,8 +18,9 @@
 #include "include/EMD.h"
 #include "include/TamuraDistance.h"
 
-using namespace std;
 using namespace cv;
+using namespace std;
+using namespace std::chrono;
 
 
 int main(int argc, char **argv) {
@@ -127,7 +129,11 @@ int main(int argc, char **argv) {
         vector<vector<Mat>> results_per_dist;
         for(ImageDistance *current_dist : dists_to_calc){
             cout << "image distance: " << current_dist->get_class_name() << endl;
+            auto start_time = high_resolution_clock::now();
             vector<int> ids_sorted = ImageSimilaritySorter().sort_by_distance(query_id, imgs_data, *current_dist);
+            auto end_time = high_resolution_clock::now();
+            double elapsed_time = duration_cast<duration<double>>(end_time - start_time).count();
+            cout << "duration " << elapsed_time << "sec" << endl;
             cout << "images similar to " << query_id << ": " << ids_sorted << endl;
             vector<Mat> imgs_sorted;
             for(int i : ids_sorted){
