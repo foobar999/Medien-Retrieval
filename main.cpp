@@ -82,13 +82,13 @@ int main(int argc, char **argv) {
         new L1Distance(),
         new L2Distance(),
         new ChiSqDistance(),
-        new HammingDistance(10), // TODO parameterized
+        new HammingDistance(10),
         new MeanColorDistance(),
         new VarianceColorDistance(),
         new CrossDistance(crosstalk_mat),
         new JD(),
         new ::EMD(crosstalk_mat),
-        new TamuraDistance(1, 4)
+        new TamuraDistance(0, 4)
     };
     while(1) {
         cout << "Images:" << endl;
