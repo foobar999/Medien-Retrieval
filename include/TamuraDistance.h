@@ -11,7 +11,7 @@ public:
 	std::string get_class_name();
 protected:
 	int kmin, kmax;
-    double calc_granularity(cv::Mat bgr_img);
+    cv::Mat calc_granularity_sbest(cv::Mat bgr_img);
     cv::Mat translate_img(cv::Mat img, int x, int y);
 };
 

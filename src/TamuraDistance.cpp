@@ -5,13 +5,20 @@ using namespace std;
 
 double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 
-    double F_crs1 = calc_granularity(dat1.rgb_img);
-    double F_crs2 = calc_granularity(dat2.rgb_img);
+    Mat S_best1 = calc_granularity_sbest(dat1.rgb_img);
+    Mat S_best2 = calc_granularity_sbest(dat2.rgb_img);
+    double F_crs1 = mean(S_best1)[0], F_crs2 = mean(S_best2)[0];
     cout << "F_crs: " << Vec2d(F_crs1, F_crs2) << endl;
 
-    // TODO normalisierung
-    // TODO vermeide mehrfachberechnung für 1
-    // TODO performance?
+    cout << "S_best histograms:" << endl;
+    Vec2f hist_range(pow(2,kmin), pow(2,kmax)+1);
+    int nbins = hist_range[1] - hist_range[0];
+    cout << nbins << " bins, range " << hist_range << " (start inclusive, end exclusive)" << endl;
+    Mat hist1 = HistogramCalculator().calc_1d_hist(S_best1, nbins, hist_range);
+    Mat hist2 = HistogramCalculator().calc_1d_hist(S_best2, nbins, hist_range);
+    cout << hist1 << endl << hist2 << endl;
+    //cout << "total " << sum(hist1)[0] << "," << sum(hist2)[0] << " expected " << dat2.rgb_img.total() << endl;
+
     return fabs(F_crs1 - F_crs2);
 }
 
@@ -19,7 +26,7 @@ string TamuraDistance::get_class_name() {
     return "Tamura-Granularity-Distance";
 }
 
-double TamuraDistance::calc_granularity(Mat bgr_img) {
+Mat TamuraDistance::calc_granularity_sbest(Mat bgr_img) {
     //vector<Mat> A_k_list;
     //vector<Mat> E_k_list;
 
@@ -35,7 +42,6 @@ double TamuraDistance::calc_granularity(Mat bgr_img) {
     Mat S_best_maxval(bgr_img.size(), CV_64F, Scalar(0));
 
     for (int k = kmin; k <= kmax; k++) {
-        cout << "k " << k << endl;
         Mat A_k;
         int k_pow = pow(2, k - 1);
         /*
@@ -129,16 +135,9 @@ double TamuraDistance::calc_granularity(Mat bgr_img) {
     return 8;
     //*/
 
-    cout << "S_best histogram of 2nd image:" << endl;
-    Vec2f hist_range(pow(2,kmin), pow(2,kmax)+1);
-    int nbins = hist_range[1] - hist_range[0];
-    cout << nbins << " bins, range " << hist_range << " (start inclusive, end exclusive)" << endl;
-    Mat hist = HistogramCalculator().calc_1d_hist(S_best_k, nbins, hist_range);
-    cout << hist << endl;
-    double minv, maxv;
-    minMaxLoc(S_best_k, &minv, &maxv);
-    cout << "values min " << minv << " max " << maxv << endl;
-    cout << "total " << sum(hist)[0] << " expected " << bgr_img.total() << endl;
+    //double minv, maxv;
+    //minMaxLoc(S_best_k, &minv, &maxv);
+    //cout << "values min " << minv << " max " << maxv << endl;
     //cout << "corners: " << Vec4f(S_best_k.at<float>(0,0),hist.at<float>(S_best_k.rows-1,0),hist.at<float>(0,S_best_k.cols-1),hist.at<float>(S_best_k.rows-1,S_best_k.cols-1)) << endl;
     //vector<Point> locations;
     //findNonZero(S_best_k == 0, locations);
@@ -146,7 +145,8 @@ double TamuraDistance::calc_granularity(Mat bgr_img) {
 
     //cout << "S_best_k" << S_best_k << endl;
     //double F_crs = cv::sum(S_best_k)[0] / S_best_k.total();
-    return mean(S_best_k)[0];
+    //return mean(S_best_k)[0];
+    return S_best_k;
 }
 
 
