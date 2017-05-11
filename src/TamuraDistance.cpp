@@ -7,8 +7,6 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
 
     Mat S_best1 = calc_granularity_sbest(dat1.rgb_img);
     Mat S_best2 = calc_granularity_sbest(dat2.rgb_img);
-    double F_crs1 = mean(S_best1)[0], F_crs2 = mean(S_best2)[0];
-    cout << "F_crs: " << Vec2d(F_crs1, F_crs2) << endl;
 
     cout << "S_best histograms:" << endl;
     Vec2f hist_range(pow(2,kmin), pow(2,kmax)+1);
@@ -19,6 +17,8 @@ double TamuraDistance::calc(const ImageData &dat1, const ImageData &dat2) {
     cout << hist1 << endl << hist2 << endl;
     //cout << "total " << sum(hist1)[0] << "," << sum(hist2)[0] << " expected " << dat2.rgb_img.total() << endl;
 
+    double F_crs1 = mean(S_best1)[0], F_crs2 = mean(S_best2)[0];
+    cout << "F_crs: " << Vec2d(F_crs1, F_crs2) << endl;
     return fabs(F_crs1 - F_crs2);
 }
 
