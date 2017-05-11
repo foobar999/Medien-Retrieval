@@ -2,7 +2,7 @@
 #define TAMURADISTANCE_H
 
 #include "ImageDistance.h"
-
+#include "HistogramCalculator.h"
 
 class TamuraDistance : public ImageDistance {
 public:

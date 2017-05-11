@@ -3,12 +3,7 @@
 using namespace std;
 using namespace cv;
 
-HistogramCalculator::HistogramCalculator(Vec3i nbins, Vec3f range){
-    this->nbins = nbins;
-    this->range = range;
-}
-
-Mat HistogramCalculator::calc(Mat hsv_img){
+Mat HistogramCalculator::calc(Mat hsv_img, Vec3i nbins, Vec3f range){
     vector<Mat> img_vec = {hsv_img};
     vector<int> use_all_channels = {0, 1, 2};
     Mat res;
@@ -24,6 +19,26 @@ Mat HistogramCalculator::calc(Mat hsv_img){
     //Mat mat1d(1, res.total(), res.type(), (void*)res.data);
     //return mat1d.clone();
     return res;
+}
+
+Mat HistogramCalculator::calc_1d_hist(Mat values, int nbins, float minval, float maxval){
+    vector<Mat> values_vec = {values};
+    vector<int> use_1_channel = {0};
+    Mat res;
+    vector<int> nbins_vec = {nbins};
+    vector<float> ranges_vec = {minval, maxval};
+    calcHist(values_vec, use_1_channel, Mat(), res, nbins_vec, ranges_vec);
+
+    /*
+    //vector<Mat> values_vec = {values};
+    int nchannels[] = {0};
+    Mat res;
+    const float range[] = {0, maxval};
+    const float *x[] = {range};
+    calcHist(&values, 1, nchannels, Mat(), res, 1, &nbins, x);
+    return res;
+    */
+    return res.t();
 }
 
 Mat HistogramCalculator::normalize(Mat hist){

@@ -44,10 +44,9 @@ int main(int argc, char **argv) {
     cout << "maximum hsv elements " << maxi << endl;
 
     Vec3i nbins(16, 3, 3);
-    HistogramCalculator hist_calc(nbins, HSVConverter::hsv_range);
     vector<Mat> hsv_hists;
     for(Mat hsv_img : hsv_imgs) {
-        hsv_hists.push_back(hist_calc.calc(hsv_img));
+        hsv_hists.push_back(HistogramCalculator().calc(hsv_img, nbins, HSVConverter::hsv_range));
     }
     cout << "calculated histograms" << endl;
 
@@ -55,7 +54,7 @@ int main(int argc, char **argv) {
 
     vector<Mat> norm_hsv_hists;
     for(Mat &hist : hsv_hists) {
-        norm_hsv_hists.push_back(hist_calc.normalize(hist));
+        norm_hsv_hists.push_back(HistogramCalculator().normalize(hist));
     }
     cout << "calculated normalized histograms" << endl;
 
