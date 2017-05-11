@@ -25,7 +25,12 @@ double TamuraDistance::calc_granularity(Mat bgr_img) {
 
     Mat gray_img;
     cvtColor(bgr_img, gray_img, CV_BGR2GRAY);
-
+    /*
+    imshow("a", gray_img);
+    imshow("b", translate_img(gray_img, 100, 50));
+    waitKey(0);
+    exit(1);
+    */
     Mat S_best_k(bgr_img.size(), CV_32F);
     Mat S_best_maxval(bgr_img.size(), CV_64F, Scalar(0));
 
@@ -52,6 +57,8 @@ double TamuraDistance::calc_granularity(Mat bgr_img) {
         */
         Size filter_size(2*k_pow, 2*k_pow);
         boxFilter(gray_img, A_k, CV_64F, filter_size, Point(-1,-1), true, BORDER_REFLECT_101);
+        //cout << "A_k corners: " << Vec4f(A_k.at<float>(0,0),A_k.at<float>(A_k.rows-1,0),A_k.at<float>(0,A_k.cols-1),A_k.at<float>(A_k.rows-1,A_k.cols-1)) << endl;
+
         //A_k /= pow(2, 2 * k);
         //A_k_list.push_back(A_k);
 
@@ -123,11 +130,19 @@ double TamuraDistance::calc_granularity(Mat bgr_img) {
     //*/
 
     cout << "S_best histogram of 2nd image:" << endl;
-    float minval = pow(2,kmin), maxval = pow(2,kmax);
-    int nbins = maxval - minval;
-    cout << nbins << " bins, range " << minval << "-" << maxval << endl;
-    Mat hist = HistogramCalculator().calc_1d_hist(S_best_k, nbins, minval, maxval);
+    Vec2f hist_range(pow(2,kmin), pow(2,kmax)+1);
+    int nbins = hist_range[1] - hist_range[0];
+    cout << nbins << " bins, range " << hist_range << " (start inclusive, end exclusive)" << endl;
+    Mat hist = HistogramCalculator().calc_1d_hist(S_best_k, nbins, hist_range);
     cout << hist << endl;
+    double minv, maxv;
+    minMaxLoc(S_best_k, &minv, &maxv);
+    cout << "values min " << minv << " max " << maxv << endl;
+    cout << "total " << sum(hist)[0] << " expected " << bgr_img.total() << endl;
+    //cout << "corners: " << Vec4f(S_best_k.at<float>(0,0),hist.at<float>(S_best_k.rows-1,0),hist.at<float>(0,S_best_k.cols-1),hist.at<float>(S_best_k.rows-1,S_best_k.cols-1)) << endl;
+    //vector<Point> locations;
+    //findNonZero(S_best_k == 0, locations);
+    //cout << "zero locations " << locations << endl;
 
     //cout << "S_best_k" << S_best_k << endl;
     //double F_crs = cv::sum(S_best_k)[0] / S_best_k.total();

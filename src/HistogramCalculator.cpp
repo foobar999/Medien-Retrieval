@@ -21,12 +21,12 @@ Mat HistogramCalculator::calc(Mat hsv_img, Vec3i nbins, Vec3f range){
     return res;
 }
 
-Mat HistogramCalculator::calc_1d_hist(Mat values, int nbins, float minval, float maxval){
+Mat HistogramCalculator::calc_1d_hist(Mat values, int nbins, Vec2f range){
     vector<Mat> values_vec = {values};
     vector<int> use_1_channel = {0};
     Mat res;
     vector<int> nbins_vec = {nbins};
-    vector<float> ranges_vec = {minval, maxval};
+    vector<float> ranges_vec = {range[0], range[1]};
     calcHist(values_vec, use_1_channel, Mat(), res, nbins_vec, ranges_vec);
 
     /*
