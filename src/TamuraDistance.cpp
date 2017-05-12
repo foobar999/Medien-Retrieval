@@ -32,14 +32,9 @@ Mat TamuraDistance::calc_granularity_sbest(Mat bgr_img) {
 
     Mat gray_img;
     cvtColor(bgr_img, gray_img, CV_BGR2GRAY);
-    /*
-    imshow("a", gray_img);
-    imshow("b", translate_img(gray_img, 100, 50));
-    waitKey(0);
-    exit(1);
-    */
     Mat S_best_k(bgr_img.size(), CV_32F);
     Mat S_best_maxval(bgr_img.size(), CV_64F, Scalar(0));
+    Mat S_num_best_ks(bgr_img.size(), CV_32F, Scalar(1));
 
     for (int k = kmin; k <= kmax; k++) {
         if(k == 0) {
@@ -112,44 +107,42 @@ Mat TamuraDistance::calc_granularity_sbest(Mat bgr_img) {
                 }
             }
             */
+
+            /*
             MatExpr maxi_mask = (E_k_h > S_best_maxval) | (E_k_v > S_best_maxval);
             S_best_k.setTo(pow(2, k), maxi_mask);
+            MatExpr same_mask = E_k_h == S_best_maxval;
             S_best_maxval = cv::max(S_best_maxval, cv::max(E_k_h, E_k_v));
+            */
+
+            MatExpr greater_mask = E_k_h > S_best_maxval;
+            S_best_k.setTo(k, greater_mask);
+            S_num_best_ks.setTo(1, greater_mask);
+
+            MatExpr equal_mask = E_k_h == S_best_maxval;
+            add(S_best_k, k, S_best_k, equal_mask);
+            add(S_num_best_ks, 1, S_num_best_ks, equal_mask);
+
+            S_best_maxval = cv::max(S_best_maxval, E_k_h);
+
+            // TODO fun
+            MatExpr greater_mask2 = E_k_v > S_best_maxval;
+            S_best_k.setTo(k, greater_mask2);
+            S_num_best_ks.setTo(1, greater_mask2);
+
+            MatExpr equal_mask2 = E_k_v == S_best_maxval;
+            add(S_best_k, k, S_best_k, equal_mask2);
+            add(S_num_best_ks, 1, S_num_best_ks, equal_mask2);
+
+            S_best_maxval = cv::max(S_best_maxval, E_k_v);
+
         }
-        //E_k_list.push_back(E_k_h);
-        //E_k_list.push_back(E_k_v);
     }
 
-    //Mat F_crs;
-    //normalize(S_best_k, F_crs, )
+    divide(S_best_k, S_num_best_ks, S_best_k);
+    // S_best_k = 2 ^ S_best_k
+    exp(S_best_k * std::log(2), S_best_k);
 
-    /*
-    //Mat res;
-    //boxFilter(A_k_list[3], res, -1, Size(8, 8));
-    //cout << (res == A_k_list[3]) << endl;
-
-
-    Mat dst;
-    normalize(A_k_list.at(3), dst, 0, 1, cv::NORM_MINMAX);
-    imshow("test", dst);
-    waitKey(0);
-
-    //imshow("abc", A_k_list.front());
-    //waitKey(0);
-    return 8;
-    //*/
-
-    //double minv, maxv;
-    //minMaxLoc(S_best_k, &minv, &maxv);
-    //cout << "values min " << minv << " max " << maxv << endl;
-    //cout << "corners: " << Vec4f(S_best_k.at<float>(0,0),hist.at<float>(S_best_k.rows-1,0),hist.at<float>(0,S_best_k.cols-1),hist.at<float>(S_best_k.rows-1,S_best_k.cols-1)) << endl;
-    //vector<Point> locations;
-    //findNonZero(S_best_k == 0, locations);
-    //cout << "zero locations " << locations << endl;
-
-    //cout << "S_best_k" << S_best_k << endl;
-    //double F_crs = cv::sum(S_best_k)[0] / S_best_k.total();
-    //return mean(S_best_k)[0];
     return S_best_k;
 }
 
