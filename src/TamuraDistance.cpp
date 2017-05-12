@@ -32,9 +32,10 @@ Mat TamuraDistance::calc_granularity_sbest(Mat bgr_img) {
 
     Mat gray_img;
     cvtColor(bgr_img, gray_img, CV_BGR2GRAY);
-    Mat S_best_k(bgr_img.size(), CV_32F);
-    Mat S_best_maxval(bgr_img.size(), CV_64F, Scalar(0));
-    Mat S_num_best_ks(bgr_img.size(), CV_32F, Scalar(1));
+    Mat S_best_k(bgr_img.size(), CV_32F);   // speichert Summe aller k, bei denen E_k maximal war
+    Mat S_best_maxval(bgr_img.size(), CV_64F, Scalar(0));   // speichert akt. Maximum fü E_k
+    Mat S_num_best_ks(bgr_img.size(), CV_32F, Scalar(1));   // zählt, bei wie vielen k E_k maximal war
+    // E_k_h, E_k_v werden je getrennt berücksichtigt
 
     for (int k = kmin; k <= kmax; k++) {
         if(k == 0) {
@@ -115,27 +116,8 @@ Mat TamuraDistance::calc_granularity_sbest(Mat bgr_img) {
             S_best_maxval = cv::max(S_best_maxval, cv::max(E_k_h, E_k_v));
             */
 
-            MatExpr greater_mask = E_k_h > S_best_maxval;
-            S_best_k.setTo(k, greater_mask);
-            S_num_best_ks.setTo(1, greater_mask);
-
-            MatExpr equal_mask = E_k_h == S_best_maxval;
-            add(S_best_k, k, S_best_k, equal_mask);
-            add(S_num_best_ks, 1, S_num_best_ks, equal_mask);
-
-            S_best_maxval = cv::max(S_best_maxval, E_k_h);
-
-            // TODO fun
-            MatExpr greater_mask2 = E_k_v > S_best_maxval;
-            S_best_k.setTo(k, greater_mask2);
-            S_num_best_ks.setTo(1, greater_mask2);
-
-            MatExpr equal_mask2 = E_k_v == S_best_maxval;
-            add(S_best_k, k, S_best_k, equal_mask2);
-            add(S_num_best_ks, 1, S_num_best_ks, equal_mask2);
-
-            S_best_maxval = cv::max(S_best_maxval, E_k_v);
-
+            update_sbest_matrices(E_k_h, k, S_best_k, S_best_maxval, S_num_best_ks);
+            update_sbest_matrices(E_k_v, k, S_best_k, S_best_maxval, S_num_best_ks);
         }
     }
 
@@ -152,4 +134,21 @@ Mat TamuraDistance::translate_img(Mat img, int x, int y) {
     Mat res;
     warpAffine(img,res,trans_mat,img.size(), INTER_LINEAR, BORDER_REFLECT_101);
     return res;
+}
+
+
+void TamuraDistance::update_sbest_matrices(Mat E_k, int k, Mat &S_best_k, Mat &S_best_maxval, Mat &S_num_best_ks) {
+    // falls Element in E_k größer: setze zug. Zähler in
+    // S_num_best_ks auf 1 zurück, speichere zug. k in S_best_k
+    MatExpr greater_mask = E_k > S_best_maxval;
+    S_best_k.setTo(k, greater_mask);
+    S_num_best_ks.setTo(1, greater_mask);
+
+    // falls Element in E_k gleich: erhöhe zug. Zähler in
+    // S_num_best_ks um 1, addiere zug. k in S_best_k
+    MatExpr equal_mask = E_k == S_best_maxval;
+    add(S_best_k, k, S_best_k, equal_mask);
+    add(S_num_best_ks, 1, S_num_best_ks, equal_mask);
+
+    S_best_maxval = cv::max(S_best_maxval, E_k);
 }
