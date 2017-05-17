@@ -12,7 +12,7 @@ double JD::calc(const ImageData &dat1, const ImageData &dat2){
         float ele1 = hist1.at<float>(0, i);
         float ele2 = hist2.at<float>(0, i);
         float mean = (ele1 + ele2) / 2;
-        cout << "ele1 " << ele1 << " ele2 " << ele2 << " res " << ele1 * std::log(ele1/mean) + ele2 * std::log(ele2/mean) << endl;
+        //cout << "ele1 " << ele1 << " ele2 " << ele2 << " res " << ele1 * std::log(ele1/mean) + ele2 * std::log(ele2/mean) << endl;
 
         double tempsum1 = ele1 * std::log(ele1/mean);
         double tempsum2 = ele2 * std::log(ele2/mean);

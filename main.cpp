@@ -37,6 +37,7 @@ int main(int argc, char **argv) {
         for(int i = 0; i < hsv_img.rows; i++) {
             for(int j = 0; j < hsv_img.cols; j++) {
                 Vec3f ele = hsv_img.at<Vec3f>(i, j);
+                //cout << ele << endl;
                 maxi = Vec3f(max(maxi[0],ele[0]), max(maxi[1],ele[1]), max(maxi[2],ele[2]));
             }
         }
