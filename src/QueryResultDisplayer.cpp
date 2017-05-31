@@ -10,6 +10,7 @@ void QueryResultDisplayer::display(Mat query_img, const vector<vector<Mat>> &res
         Mat next_row = create_query_result_thumb_row(result, thumb_size);
         vconcat(current_res, next_row, current_res);
     }
+	//imwrite("tamura_fein.jpg", current_res);
     imshow(winname, current_res);
     waitKey();
     //cvDestroyWindow(winname.c_str());

@@ -42,6 +42,7 @@ int main(int argc, char **argv) {
             }
         }
     }
+
     cout << "maximum hsv elements " << maxi << endl;
 
     Vec3i nbins(16, 3, 3);

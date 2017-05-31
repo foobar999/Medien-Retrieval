@@ -17,10 +17,6 @@ double JD::calc(const ImageData &dat1, const ImageData &dat2){
         double tempsum1 = ele1 * std::log(ele1/mean);
         double tempsum2 = ele2 * std::log(ele2/mean);
 
-        //if(!isnan(tempsum1))
-        //    cout << "HAIL!" << endl;
-
-
         if(isnan(tempsum1) == false)    // IEEE : f != f will be true only if f is NaN
             sum += tempsum1;
         if(isnan(tempsum2) == false)
